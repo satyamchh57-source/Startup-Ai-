@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StartupAI — Build Your Next Startup</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #eef5ff;
+      background:
+        radial-gradient(circle at 50% 0%, #193b67 0%, #07111f 45%);
+      min-height: 100vh;
+    }
+
+    nav {
+      height: 70px;
+      padding: 0 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1d3650;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .logo span {
+      color: #72a9ff;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 18px;
+      color: white;
+      background: #173252;
+    }
+
+    .hero {
+      max-width: 900px;
+      margin: auto;
+      padding: 85px 20px 55px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 15px;
+      border: 1px solid #31557c;
+      border-radius: 50px;
+      color: #a9ceff;
+      background: #0d2037;
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1;
+      margin: 25px 0;
+    }
+
+    h1 span {
+      color: #72a9ff;
+    }
+
+    .hero-description {
+      color: #9fb1c8;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .box {
+      margin: 30px auto 0;
+      max-width: 780px;
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      background: #0c1b2e;
+      border: 1px solid #294763;
+      border-radius: 18px;
+    }
+
+    textarea {
+      flex: 1;
+      min-height: 100px;
+      padding: 10px;
+      color: white;
+      background: transparent;
+      border: 0;
+      outline: none;
+      resize: vertical;
+      font-size: 16px;
+    }
+
+    .generate {
+      align-self: flex-end;
+      background: #5c8ff0;
+      font-weight: bold;
+    }
+
+    #result {
+      display: none;
+      max-width: 780px;
+      margin: 20px auto;
+      padding: 20px;
+      text-align: left;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      background: #0b1a2c;
+      border: 1px solid #294763;
+      border-radius: 14px;
+    }
+
+    .tools {
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px 20px 90px;
+    }
+
+    .tools h2 {
+      text-align: center;
+      font-size: 34px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .card {
+      padding: 22px;
+      background: #0c1b2e;
+      border: 1px solid #1d3b59;
+      border-radius: 16px;
+    }
+
+    .icon {
+      font-size: 30px;
+    }
+
+    .card p {
+      color: #8fa4bc;
+      line-height: 1.5;
+    }
+
+    .card button {
+      padding: 0;
+      color: #8fb9ff;
+      background: transparent;
+    }
+
+    footer {
+      padding: 25px;
+      text-align: center;
+      color: #637991;
+      border-top: 1px solid #19344e;
+    }
+
+    @media (max-width: 650px) {
+      .box {
+        flex-direction: column;
+      }
+
+      .generate {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">
+      ✦ Startup<span>AI</span>
+    </div>
+
+    <button>Sign in</button>
+  </nav>
+
+  <section class="hero">
+
+    <div class="badge">
+      🚀 Build your next startup
+    </div>
+
+    <h1>
+      Turn your idea into a
+      <span>real business.</span>
+    </h1>
+
+    <p class="hero-description">
+      AI-powered startup planning for ideas, customers,
+      revenue and growth — in English, Hindi or Hinglish.
+    </p>
+
+    <div class="box">
+
+      <textarea
+        id="prompt"
+        placeholder="Describe your startup idea, skill, budget or problem..."
+      ></textarea>
+
+      <button
+        class="generate"
+        onclick="generateIdea()"
+      >
+        Generate with AI →
+      </button>
+
+    </div>
+
+    <div id="result"></div>
+
+  </section>
+
+  <section class="tools">
+
+    <h2>
+      Everything you need to launch
+    </h2>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="icon">💡</div>
+        <h3>Startup Idea Generator</h3>
+        <p>
+          Turn your skills, budget and problems
+          into startup ideas.
+        </p>
+        <button onclick="useTool('Generate a startup idea for me')">
+          Try it →
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="icon">📋</div>
+        <h3>Business Plan</h3>
+        <p>
+          Create a business model and
+          execution roadmap.
+        </p>
+        <button onclick="useTool('Create a business plan')">
+          Try it →
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="icon">📈</div>
+        <h3>Market Analyzer</h3>
+        <p>
+          Analyze customers, competitors
+          and opportunities.
+        </p>
+        <button onclick="useTool('Analyze my target market')">
+          Try it →
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="icon">💰</div>
+        <h3>Revenue Planner</h3>
+        <p>
+          Explore pricing and revenue
+          opportunities.
+        </p>
+        <button onclick="useTool('Create a revenue plan')">
+          Try it →
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="icon">📣</div>
+        <h3>Marketing Plan</h3>
+        <p>
+          Create a startup launch and
+          customer acquisition strategy.
+        </p>
+        <button onclick="useTool('Create a marketing plan')">
+          Try it →
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    © 2026 StartupAI · AI Startup Planning Platform
+  </footer>
+
+  <script>
+
+    function useTool(text) {
+      document.getElementById("prompt").value = text;
+      document.getElementById("prompt").focus();
+    }
+
+    function generateIdea() {
+
+      const prompt =
+        document.getElementById("prompt").value.trim();
+
+      if (!prompt) {
+        alert("Please enter your startup idea first.");
+        return;
+      }
+
+      const result =
+        document.getElementById("result");
+
+      result.style.display = "block";
+
+      result.textContent =
+`🚀 StartupAI Analysis
+
+Your request:
+${prompt}
+
+🎯 Target Customer
+Start with a focused customer group that has a frequent and painful problem.
+
+💡 Value Proposition
+Solve that problem faster, cheaper or more conveniently than existing alternatives.
+
+💰 Business Model
+Start with a simple paid plan and validate demand before building a large product.
+
+📣 Launch Plan
+
+1. Talk to potential customers
+2. Validate the problem
+3. Build a simple MVP
+4. Launch to early users
+5. Measure conversions
+6. Improve the product
+7. Scale the best marketing channel
+
+📈 Growth Strategy
+Focus on one customer segment and one acquisition channel first.
+
+🤖 AI Status
+This is currently the StartupAI demo engine.
+Live AI API can be connected next.`;
+
+    }
+
+  </script>
+
+</body>
+</html>
