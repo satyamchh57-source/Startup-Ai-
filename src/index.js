@@ -2,6 +2,7 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Real AI endpoint
     if (url.pathname === "/api/generate" && request.method === "POST") {
       try {
         const body = await request.json();
@@ -30,9 +31,9 @@ export default {
               "Authorization": `Bearer ${env.OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-              model: "gpt-5.6-luna",
+              model: "gpt-5.6",
               instructions:
-                "You are StartupAI, an expert startup advisor. Give practical, concise and actionable startup advice. Support English, Hindi and Hinglish.",
+                "You are StartupAI, an expert startup advisor. Give practical, actionable startup advice. Support English, Hindi and Hinglish.",
               input: prompt
             })
           }
@@ -42,7 +43,11 @@ export default {
 
         if (!response.ok) {
           return Response.json(
-            { error: data.error?.message || "OpenAI request failed" },
+            {
+              error:
+                data.error?.message ||
+                "OpenAI request failed"
+            },
             { status: response.status }
           );
         }
@@ -50,14 +55,16 @@ export default {
         return Response.json({
           answer: data.output_text || "No response generated."
         });
+
       } catch (error) {
         return Response.json(
-          { error: "Server error: " + error.message },
+          { error: "Server error" },
           { status: 500 }
         );
       }
     }
 
+    // Serve the website
     return env.ASSETS.fetch(request);
   }
 };
