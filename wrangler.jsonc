@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "startup-ai",
+  "compatibility_date": "2026-08-25",
+  "assets": { "directory": "./out" }
+}
