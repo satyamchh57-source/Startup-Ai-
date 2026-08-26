@@ -2,7 +2,6 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    // Real AI endpoint
     if (url.pathname === "/api/generate" && request.method === "POST") {
       try {
         const body = await request.json();
@@ -17,12 +16,12 @@ export default {
 
         if (!env.OPENAI_API_KEY) {
           return Response.json(
-            { error: "OPENAI_API_KEY is not configured" },
+            { error: "OPENAI_API_KEY secret is missing" },
             { status: 500 }
           );
         }
 
-        const response = await fetch(
+        const openaiResponse = await fetch(
           "https://api.openai.com/v1/responses",
           {
             method: "POST",
@@ -32,39 +31,55 @@ export default {
             },
             body: JSON.stringify({
               model: "gpt-5.6",
-              instructions:
-                "You are StartupAI, an expert startup advisor. Give practical, actionable startup advice. Support English, Hindi and Hinglish.",
               input: prompt
             })
           }
         );
 
-        const data = await response.json();
+        const text = await openaiResponse.text();
 
-        if (!response.ok) {
+        let data;
+
+        try {
+          data = JSON.parse(text);
+        } catch {
+          return Response.json(
+            {
+              error: "OpenAI returned a non-JSON response",
+              status: openaiResponse.status
+            },
+            { status: 502 }
+          );
+        }
+
+        if (!openaiResponse.ok) {
           return Response.json(
             {
               error:
-                data.error?.message ||
-                "OpenAI request failed"
+                data?.error?.message ||
+                "OpenAI API request failed"
             },
-            { status: response.status }
+            { status: openaiResponse.status }
           );
         }
 
         return Response.json({
-          answer: data.output_text || "No response generated."
+          answer:
+            data.output_text ||
+            "AI response was empty."
         });
 
       } catch (error) {
         return Response.json(
-          { error: "Server error" },
+          {
+            error: error?.message || "Worker error"
+          },
           { status: 500 }
         );
       }
     }
 
-    // Serve the website
+    // Website files
     return env.ASSETS.fetch(request);
   }
 };
