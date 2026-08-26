@@ -362,3 +362,38 @@ Live AI API can be connected next.`;
 
 </body>
 </html>
+
+async function generateIdea() {
+  const prompt = document.getElementById("prompt").value.trim();
+  const result = document.getElementById("result");
+
+  if (!prompt) {
+    result.style.display = "block";
+    result.textContent = "Please enter your startup idea.";
+    return;
+  }
+
+  result.style.display = "block";
+  result.textContent = "🤖 StartupAI is thinking...";
+
+  try {
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ prompt })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "AI request failed");
+    }
+
+    result.textContent = data.answer;
+
+  } catch (err) {
+    result.textContent = "❌ " + err.message;
+  }
+}
